@@ -30,6 +30,7 @@ class SalesForm extends Component
     public $discount = 0;
     public $received_amount = 0;
 
+
     protected $listeners = ['focus-quantity' => 'focusQuantity'];
 
     public function mount()
@@ -201,19 +202,23 @@ class SalesForm extends Component
     // Metode untuk mengkonversi nilai string yang diformat menjadi angka
     public function updatedShippingCost($value)
     {
-        $this->shipping_cost = (int)str_replace(['.', ','], '', $value);
+        $this->shipping_cost = (float) str_replace(['.', ','], ['', '.'], $value);
     }
     public function updatedServiceFee($value)
     {
-        $this->service_fee = (int)str_replace(['.', ','], '', $value);
+        $this->service_fee = (float)str_replace(['.', ','], '', $value);
     }
     public function updatedDiscount($value)
     {
-        $this->discount = (int)str_replace(['.', ','], '', $value);
+        $this->discount = (float)str_replace(['.', ','], '', $value);
     }
     public function updatedReceivedAmount($value)
     {
-        $this->received_amount = (int)str_replace(['.', ','], '', $value);
+        // Hapus pemisah ribuan (.) dan ubah koma (,) jadi titik
+        $clean = str_replace(['.', ','], ['', '.'], $value);
+
+        // Simpan sebagai float supaya desimal tidak hilang
+        $this->received_amount = is_numeric($clean) ? (float)$clean : 0;
     }
 
     public function getSubtotalProperty()
@@ -271,6 +276,7 @@ class SalesForm extends Component
                 ]);
             }
             DB::commit();
+            $this->dispatch('sale-completed');
 
             session()->flash('success', 'Penjualan berhasil dicatat!');
             $this->reset(['customerSearchTerm', 'productSearchTerm', 'selectedCustomer', 'selectedProduct', 'quantity', 'cart', 'shipping_cost', 'service_fee', 'discount', 'received_amount']);
