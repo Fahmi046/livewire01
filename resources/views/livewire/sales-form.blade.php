@@ -31,7 +31,7 @@ $wire.on('focus-new-customer-email', () => focusInput('new-email'));
 $wire.on('focus-shipping-cost', () => focusInput('shipping-cost'));
 $wire.on('focus-service-fee', () => focusInput('service-fee'));
 $wire.on('focus-discount', () => focusInput('discount'));
-$wire.on('focus-received-amount', () => focusInput('received-amount'));" @keydown.f8.prevent="$wire.completeSale()">
+$wire.on('focus-received-amount', () => focusInput('received-amount'));" @keydown.f8.prevent="focusInput('shipping-cost')">
     <div style="font-family: sans-serif; display: flex; gap: 20px;">
         <div style="flex: 1; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
             <h3>Input Transaksi</h3>
@@ -243,17 +243,20 @@ $wire.on('focus-received-amount', () => focusInput('received-amount'));" @keydow
                 <div>
                     <label for="shipping-cost">Ongkos Kirim</label>
                     <input type="text" id="shipping-cost" wire:model.live.debounce.150ms="shipping_cost"
-                        style="width: 100%; padding: 8px;" x-data x-mask:dynamic="$money($input, '.', ',')">
+                        style="width: 100%; padding: 8px;" x-data x-mask:dynamic="$money($input, '.', ',')"
+                        @keydown.enter.prevent="focusInput('service-fee')">
                 </div>
                 <div style="margin-top: 10px;">
                     <label for="service-fee">Biaya Layanan</label>
                     <input type="text" id="service-fee" wire:model.live.debounce.150ms="service_fee"
-                        style="width: 100%; padding: 8px;" x-data x-mask:dynamic="$money($input, '.', ',')">
+                        style="width: 100%; padding: 8px;" x-data x-mask:dynamic="$money($input, '.', ',')"
+                        @keydown.enter.prevent="focusInput('discount')">
                 </div>
                 <div style="margin-top: 10px;">
                     <label for="discount">Potongan Harga</label>
                     <input type="text" id="discount" wire:model.live.debounce.150ms="discount"
-                        style="width: 100%; padding: 8px;" x-data x-mask:dynamic="$money($input, '.', ',')">
+                        style="width: 100%; padding: 8px;" x-data x-mask:dynamic="$money($input, '.', ',')"
+                        @keydown.enter.prevent="focusInput('received-amount')">
                 </div>
             </div>
 
@@ -270,7 +273,8 @@ $wire.on('focus-received-amount', () => focusInput('received-amount'));" @keydow
                 <label for="received-amount" style="font-size: 1.2em; font-weight: bold;">Uang Diterima</label>
                 <input type="text" id="received-amount" wire:model.live.debounce.150ms="received_amount"
                     style="width: 100%; padding: 8px; font-size: 1.2em; font-weight: bold; text-align: right;" x-data
-                    x-mask:dynamic="$money($input, '.', ',')">
+                    x-mask:dynamic="$money($input, '.', ',')"
+                    @keydown.enter.prevent="focusInput('complete-sale-button')">
                 @error('received_amount')
                     <span style="color: red;">{{ $message }}</span>
                 @enderror
@@ -284,7 +288,7 @@ $wire.on('focus-received-amount', () => focusInput('received-amount'));" @keydow
 
             <hr>
 
-            <button wire:click="completeSale"
+            <button wire:click="completeSale" id="complete-sale-button"
                 style="padding: 15px; font-size: 18px; width: 100%; background-color: #28a745; color: white; border: none; border-radius: 5px;">
                 Selesaikan Penjualan
             </button>
