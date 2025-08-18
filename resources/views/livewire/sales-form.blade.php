@@ -1,6 +1,12 @@
 <div x-data="{
     customerSelectedIndex: -1,
     productSelectedIndex: -1,
+
+    resetProduct() {
+        $wire.call('resetProduct');
+        this.focusInput('product-search');
+    },
+
     focusInput(id) {
         document.getElementById(id).focus();
     },
@@ -31,7 +37,8 @@ $wire.on('focus-new-customer-email', () => focusInput('new-email'));
 $wire.on('focus-shipping-cost', () => focusInput('shipping-cost'));
 $wire.on('focus-service-fee', () => focusInput('service-fee'));
 $wire.on('focus-discount', () => focusInput('discount'));
-$wire.on('focus-received-amount', () => focusInput('received-amount'));" @keydown.f8.prevent="focusInput('shipping-cost')">
+$wire.on('focus-received-amount', () => focusInput('received-amount'));" @keydown.f12.prevent="focusInput('shipping-cost')"
+    @keydown.escape.prevent="resetProduct()">
     <div style="font-family: sans-serif; display: flex; gap: 20px;">
         <div style="flex: 1; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
             <h3>Input Transaksi</h3>

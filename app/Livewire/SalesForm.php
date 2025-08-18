@@ -287,6 +287,15 @@ class SalesForm extends Component
         }
     }
 
+    public function resetProduct()
+    {
+        $this->reset([
+            'productSearchTerm',
+            'selectedProduct',
+            'quantity'
+        ]);
+    }
+
     public function getCustomersProperty()
     {
         if (strlen($this->customerSearchTerm) >= 1) {
